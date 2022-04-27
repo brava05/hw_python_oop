@@ -54,6 +54,7 @@ class Training:
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
 
+        self.distance = self.get_distance()
         if self.duration == 0:
             return 0
         else:
@@ -85,7 +86,7 @@ class Running(Training):
 
         self.LEN_STEP = 0.65
         super().__init__(action, duration, weight)
-        self.distance = self.get_distance()
+
         self.mean_speed = self.get_mean_speed()
         self.calories = self.get_spent_calories()
 
@@ -119,7 +120,6 @@ class SportsWalking(Training):
         super().__init__(action, duration, weight)
         self.height = height
         self.LEN_STEP = 0.65
-        self.distance = self.get_distance()
         self.mean_speed = self.get_mean_speed()
         self.calories = self.get_spent_calories()
 
