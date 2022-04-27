@@ -19,7 +19,7 @@ class InfoMessage:
         """Выводим информацию о тренировке."""
 
         rez = (f'Тип тренировки: {self.training_type}; '
-               f'Длительность: {round(self.duration)} ч.; '
+               f'Длительность: {self.duration:.3f} ч.; '
                f'Дистанция: {self.distance:.3f} км; '
                f'Ср. скорость: {self.speed:.3f} км/ч; '
                f'Потрачено ккал: {self.calories:.3f}.')
@@ -29,6 +29,11 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
+    LEN_STEP = 0.65
+    M_IN_KM = 1000
+    distance = 0
+    mean_speed = 0
+    calories = 0
 
     def __init__(self,
                  action: int,
@@ -38,8 +43,6 @@ class Training:
         self.action = action
         self.duration = duration
         self.weight = weight
-        self.LEN_STEP = 0.65
-        self.M_IN_KM = 1000
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
@@ -93,12 +96,13 @@ class Running(Training):
 
         coeff_calorie_1 = 18
         coeff_calorie_2 = 20
+        mn_in_h = 60
         coeff_speed = coeff_calorie_1 * self.mean_speed - coeff_calorie_2
 
         calories = (coeff_speed
                     * self.weight
                     / self.M_IN_KM
-                    * self.duration)
+                    * self.duration * mn_in_h)
 
         return calories
 
@@ -141,6 +145,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
 
+    LEN_STEP = 1.38
+
     def __init__(self,
                  action: int,
                  duration: float,
@@ -152,7 +158,6 @@ class Swimming(Training):
         self.length_pool = length_pool
         self.count_pool = count_pool
         super().__init__(action, duration, weight)
-        self.LEN_STEP = 1.38
         self.distance = self.get_distance()
         self.mean_speed = self.get_mean_speed()
         self.calories = self.get_spent_calories()
@@ -225,8 +230,8 @@ def main(training: Training) -> None:
 if __name__ == '__main__':
     packages = [
         ('SWM', [720, 1, 80, 25, 40]),
-        ('RUN', [15000, 1, 75]),
-        # ('RUN', [12, 12, 6]),
+        # ('RUN', [15000, 1, 75]),
+        ('RUN', [420, 4, 20]),
         ('WLK', [9000, 1, 75, 180]),
     ]
 
